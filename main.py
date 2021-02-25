@@ -37,16 +37,26 @@ def get_input(filepath):
     return firstline, streets, cars
 
 
-def sort_len(elem):
-    return elem[0]
+def check_if_exist(ind, schedule):
+    for i in range(len(schedule)):
+        if (ind == schedule[i][0]):
+            return (True, i)
+    return (False, 0)
 
 def loop(coll):
     schedule = []
 
     for i in range(int(coll[0][0][2])):
         if (len(schedule) == 0):
-            schedule.append([coll[1][i][y] for y in range(4)])
-
+            schedule.append([coll[1][i][y + 1] for y in range(3)])
+        else:
+            check = check_if_exist(coll[1][i][1], schedule)
+            print(check)
+            if (check[0] == True):
+                for x in range(3):
+                    schedule[check[1]].append(coll[1][i][x + 1])
+            else:
+                schedule.append([coll[1][i][y + 1] for y in range(3)])
     print(schedule)
 
         

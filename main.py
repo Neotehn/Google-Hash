@@ -3,15 +3,13 @@ import sys
 
 def get_input(filepath):
     counter = 0
-    file = open("a.txt", 'r')
+    file = open(filepath, 'r')
     content = file.readlines()
     new = []
     for lines in content:
         new.append(lines.split(" "))
         new[counter] = lines.rstrip()
         counter += 1
-
-
     firstline = []
     streets = []
     cars = []
@@ -37,11 +35,11 @@ def get_input(filepath):
     print(firstline)
     print(streets)
     print(cars)
+    file.close()
     return firstline, streets, cars
 
-
 def main(argv):
-    get_input(argv)
+    get_input(argv[1])
 
 
 

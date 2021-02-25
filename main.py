@@ -43,8 +43,11 @@ def sort_len(elem):
 def loop(coll):
     schedule = []
 
-    for i in range(int(coll[0][0][1])):
-        print("yes")
+    for i in range(int(coll[0][0][2])):
+        if (len(schedule) == 0):
+            schedule.append([coll[1][i][y] for y in range(4)])
+
+    print(schedule)
 
         
         

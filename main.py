@@ -13,7 +13,8 @@ def get_input(filepath):
     firstline = []
     streets = []
     cars = []
-    firstline.append(new[0])
+
+    firstline.append(new[0].split(" "))
 
     stop = 0
     counter_for_cars = 0
@@ -23,14 +24,14 @@ def get_input(filepath):
             continue
         tmp = x[::-1][0]
         if tmp.isnumeric() == True:
-            streets.append(x)
+            streets.append(x.split(" "))
             counter_for_cars += 1
     stop = 0
     for x in new:
         if stop <= counter_for_cars:
             stop +=1
             continue
-        cars.append(x)
+        cars.append(x.split(" "))
 
     file.close()
     print(firstline)

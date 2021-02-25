@@ -38,13 +38,14 @@ def get_input(filepath):
 
 
 def sort_len(elem):
-    return len(elem)
+    return elem[0]
 
 def loop(coll):
-    intersections = 0
+    schedule = []
 
-    coll[2].sort(key=sort_len)
-    for i in range(int(coll[0][0][0])):
+    for i in range(int(coll[0][0][1])):
+        print("yes")
+
         
         
 

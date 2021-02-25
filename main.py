@@ -61,8 +61,8 @@ def loop(coll):
     for i in range(len(schedule)):
         lol = 1
         print(int(schedule[i][0]))
-        print((len(schedule[i]) - 1) / 2)
-        for x in range((len(schedule[i]) - 1 / 2)):
+        print(int((len(schedule[i]) - 1) / 2))
+        for x in range(int((len(schedule[i]) - 1) / 2)):
             print(str(schedule[i][lol]) + " " + str(schedule[i][lol + 1]))
             lol += 2
 

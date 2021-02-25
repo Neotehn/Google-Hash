@@ -34,17 +34,18 @@ def get_input(filepath):
         cars.append(x.split(" "))
 
     file.close()
-    print(firstline)
-    print(streets)
-    print(cars)
     return firstline, streets, cars
 
+
+def sort_len(elem):
+    return len(elem)
 
 def loop(coll):
     intersections = 0
 
-    for i in range(2):
-        print("works")
+    coll[2].sort(key=sort_len)
+    for i in range(int(coll[0][0][0])):
+        
         
 
 def main(argv):

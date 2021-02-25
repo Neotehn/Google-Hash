@@ -51,16 +51,20 @@ def loop(coll):
             schedule.append([coll[1][i][y + 1] for y in range(3)])
         else:
             check = check_if_exist(coll[1][i][1], schedule)
-            print(check)
             if (check[0] == True):
-                for x in range(3):
-                    schedule[check[1]].append(coll[1][i][x + 1])
+                for x in range(2):
+                    schedule[check[1]].append(coll[1][i][x + 2])
             else:
                 schedule.append([coll[1][i][y + 1] for y in range(3)])
-    print(schedule)
-
-        
-        
+    
+    print(len(schedule))
+    for i in range(len(schedule)):
+        lol = 1
+        print(int(schedule[i][0]))
+        print((len(schedule[i]) - 1) / 2)
+        for x in range((len(schedule[i]) - 1 / 2)):
+            print(str(schedule[i][lol]) + " " + str(schedule[i][lol + 1]))
+            lol += 2
 
 def main(argv):
     coll = get_input(argv[1])

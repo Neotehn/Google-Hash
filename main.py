@@ -32,14 +32,24 @@ def get_input(filepath):
             continue
         cars.append(x)
 
+    file.close()
     print(firstline)
     print(streets)
     print(cars)
-    file.close()
     return firstline, streets, cars
 
+
+def loop(coll):
+    intersections = 0
+
+    for i in range(2):
+        print("works")
+        
+
 def main(argv):
-    get_input(argv[1])
+    coll = get_input(argv[1])
+    loop(coll)
+
 
 
 

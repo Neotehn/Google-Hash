@@ -1,0 +1,149 @@
+#!/usr/bin/env python3
+import sys
+import csv
+import math
+
+def usage():
+    print("USAGE")
+    print("    ./109titration file\n")
+    print("DESCRIPTION")
+    print("    file    a csv file containing 'vol;ph' lines")
+
+def change_of_rate(set1, set2):
+    try:
+        return (set2[1] - set1[1]) / (set2[0] - set1[0])
+    except:
+        sys.exit(84)
+
+def change_of_rate_sec(value, value2, i, ind):
+    if (ind == 1):
+        try:
+            return ((value2[i] - value2[i - 1]) / (value[i + 1][0] - value[i][0]))
+        except:
+            sys.exit(84)
+    else:
+        try:
+            return ((value2[i - 1] - value2[i - 2]) / (value[i][0] - value[i - 1][0]))
+        except:
+            sys.exit(84)
+
+def print_equivalence_point(equivalence, value):
+    point = 0
+    tmp = 0
+    for i in range(len(equivalence)):
+        if (i == 0):
+            point = i
+            tmp = equivalence[i]
+        else:
+            if (tmp < equivalence[i]):
+                point = i
+    print("\nEquivalence point at %.1f ml\n" % value[point][0])
+
+
+
+def weighted_mean_of_changes(value):
+    test = []
+
+    print("Derivative:")
+    try:
+        for i in range(1, len(value) - 1):
+            backward = change_of_rate(value[i - 1], value[i])
+            forward = change_of_rate(value[i], value[i + 1])
+            deltax_forward = value[i + 1][0] - value[i][0]
+            deltax_backward = value[i][0] - value[i - 1][0]
+            test.append((forward * deltax_backward + backward * deltax_forward) / (deltax_backward + deltax_forward))
+            print("%.1f ml -> %.2f"  % (value[i][0], test[i - 1]))
+    except:
+        sys.exit(84)
+    print_equivalence_point(test, value)
+    weighted_mean_of_changes2(value, test)
+
+def weighted_mean_of_changes2(value, test):
+    test1 = []
+
+    print("Second derivative:")
+    try:
+        for i in range(2, len(value) - 2):
+            backward = change_of_rate_sec(value, test, i, 0)
+            forward = change_of_rate_sec(value, test, i, 1)
+            deltax_forward = value[i + 1][0] - value[i][0]
+            deltax_backward = value[i][0] - value[i - 1][0]
+            test1.append((forward * deltax_backward + backward * deltax_forward) / (deltax_backward + deltax_forward))
+            print("%.1f ml -> %.2f"  % (value[i][0], test1[i - 2]))
+    except:
+        sys.exit(84)
+    sec_estimated(test1, value, test)
+
+def sec_estimated(derivate, first, beginning):
+    tmp = 0
+    equivalence = 0
+    lin = 0
+    last_output = []
+
+    for i in range(len(beginning)):
+        if (i == 0):
+            tmp = beginning[i]
+            equivalence = i
+        else:
+            tmp = beginning[i]
+            if (tmp > beginning[equivalence]):
+                equivalence = i
+    
+    try:
+        start = first[equivalence][0]
+        middle = first[equivalence + 1][0]
+        end = first[equivalence + 2][0]
+        lin = start
+        half_f = 0
+        half_s = 0
+
+        print("\nSecond derivative estimated:")
+        while (lin < middle):
+            half_f = ((first[equivalence][0] * derivate[equivalence - 1]) - (first[equivalence + 1][0] * derivate[equivalence - 2])) / (first[equivalence][0] - first[equivalence + 1][0])
+            half_s = ((derivate[equivalence - 2] - derivate[equivalence - 1]) / (first[equivalence][0] - first[equivalence + 1][0])) * lin
+            last_output.append([half_s + half_f, lin])
+            print("%.1f ml -> %.2f"  % (lin, (half_s + half_f)))
+            lin += 0.1
+
+        while (lin < end):
+            half_f = ((first[equivalence + 1][0] * derivate[equivalence]) - (first[equivalence + 2][0] * derivate[equivalence - 1])) / (first[equivalence + 1][0] - first[equivalence + 2][0])
+            half_s = ((derivate[equivalence - 1] - derivate[equivalence]) / (first[equivalence + 1][0] - first[equivalence + 2][0])) * lin
+            last_output.append([half_s + half_f, lin])
+            print("%.1f ml -> %.2f"  % (lin, (half_s + half_f)))
+            lin += 0.1
+        
+        equivalence_point = 0
+        for i in range(len(last_output)):
+            if (i == 0):
+                equivalence_point = i
+            elif (math.fabs(last_output[i][0]) < math.fabs(last_output[equivalence_point][0])):
+                equivalence_point = i
+        print("\nEquivalence point at %.1f ml" % last_output[equivalence_point][1])
+    except:
+        sys.exit(84)
+
+                
+
+def main(argv):
+    if (len(argv) != 2):
+        sys.exit(84)
+    
+    array = []
+    final = []
+    if (argv[1][0] == '-' and argv[1][1] == 'h'):
+        usage()
+    else:
+        try:
+            with open(argv[1], newline='') as csvfile:
+                spamreader = csv.reader(csvfile, delimiter=' ', quotechar='|')
+                for row in spamreader:
+                    array.append(row[0].split(';'))  
+            for i in range(len(array)):
+                final.append([float(array[i][0]), float(array[i][1])])
+            weighted_mean_of_changes(final)
+        except:
+            sys.exit(84)
+
+
+if __name__ == '__main__':
+    main(sys.argv)

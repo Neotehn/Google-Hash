@@ -56,7 +56,23 @@ def loop(coll):
                     schedule[check[1]].append(coll[1][i][x + 2])
             else:
                 schedule.append([coll[1][i][y + 1] for y in range(3)])
-    
+
+    for i in range(len(schedule)):
+        lol = 2
+        array = []
+        biggest = 0
+        if (len(schedule[i]) > 9):
+            for x in range(int((len(schedule[i]) - 1) / 2)):
+                if (biggest < schedule[i][lol]):
+                    biggest = schedule[i][lol]
+                lol += 2
+            for x in range(int((len(schedule[i]) - 1) / 2)):
+                if (biggest == schedule[i][x] and x != 0):
+                    array.append(schedule[i][x - 1])
+                    array.append(schedule[i][x]
+        if (len(array) != 0):
+            for x in range(int((len(schedule[i]) - 1) / 3)):
+
     print(len(schedule))
     for i in range(len(schedule)):
         lol = 1
